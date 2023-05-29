@@ -1,0 +1,1534 @@
+{
+	"info": {
+		"_postman_id": "c0c0304f-f9f4-45ec-ac83-991d6c5b474c",
+		"name": "DMONEY B-7",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27469844"
+	},
+	"item": [
+		{
+			"name": "Create & Login",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsondata= pm.response.json();\r",
+									"pm.collectionVariables.set(\"token\", jsondata.token);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Login is Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Login successful\")\r",
+									"}\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin1@roadtocareer.net\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/user/login",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Can't Login( wrong password) Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\" User Can Not Login if password is incorrect\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"incorrect password\")\r",
+									"}\r",
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin1@roadtocareer.net\",\r\n    \"password\":\"124\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/user/login",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Can't Login( wrong email)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\" User Can Not Login if email is incorrect\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin1@roadtocareer\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/user/login",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Agent",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var prefix=\"01\";\r",
+									"var randomnumber=_.random(100000000,999999999);\r",
+									"var phone_number=prefix+randomnumber;\r",
+									"pm.collectionVariables.set(\"phone_number\",phone_number);\r",
+									"\r",
+									"console.log(phone_number)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"{{$randomFullName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\",\r\n    \"phone_number\":\"{{phone_number}}\",\r\n    \"nid\":\"{{phone_number}}}\",\r\n    \"role\":\"Agent\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/user/create",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer 1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var prefix=\"01\";\r",
+									"var randomnumber=_.random(100000000,999999999);\r",
+									"var phone_number=prefix+randomnumber;\r",
+									"pm.collectionVariables.set(\"phone_number\",phone_number);\r",
+									"\r",
+									"console.log(phone_number)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"1234\",\r\n    \"phone_number\": \"{{phone_number}}\",\r\n    \"nid\": \"{{phone_number}}\",\r\n    \"role\": \"Customer\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/user/create",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var prefix=\"01\";\r",
+									"var randomnumber=_.random(100000000,999999999);\r",
+									"var phone_number=prefix+randomnumber;\r",
+									"pm.collectionVariables.set(\"phone_number\",phone_number);\r",
+									"\r",
+									"console.log(phone_number)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"{{$randomFullName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\",\r\n    \"phone_number\":\"{{phone_number}}\",\r\n    \"nid\":\"{{phone_number}}\",\r\n    \"role\":\"Customer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/user/create",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent Deposite",
+			"item": [
+				{
+					"name": "Deposite Agent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Deposite is Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Login successful\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"SYSTEM\",\r\n    \"to_account\":\"{{phone_number}}\",\r\n    \"amount\":500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/deposit",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agent Can Not Deposite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Account does not exist\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Account does not exist\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"SYSTEM\",\r\n    \"to_account\":\"0170636449\",\r\n    \"amount\":500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/deposit",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent Deposite To Customer",
+			"item": [
+				{
+					"name": "Agent Deposite To Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Deposite  Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Deposite successful\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"SYSTEM\",\r\n    \"to_account\":\"{{phone_number}}\",\r\n    \"amount\":\"50\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/deposit",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agent Can Not Deposite To Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Acount Invalid\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Acount Invalid\")\r",
+									"}\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"SYSTEM\",\r\n    \"to_account\":\"3636\",\r\n    \"amount\":100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/deposit",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Check Agent Balance",
+			"item": [
+				{
+					"name": "Check Agent Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Showing Result for This Acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Showing Result for This Acount\")\r",
+									"}\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Baseurl}}/transaction/balance/01706364497",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"01706364497"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agent Can Not Check Balance Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"User not found\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Baseurl}}/transaction/balance/017063644",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"017063644"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer Withdraw Amount",
+			"item": [
+				{
+					"name": "Withdraw Amount By Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Withdraw money is Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Withdraw successful\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"SYSTEM\",\r\n    \"to_account\":\"{{phone_number}}\",\r\n    \"amount\":3000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/withdraw",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Can  Not Withdraw Amount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Customer Can Not Withdraw From An Invalid Acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Customer Can Not Withdraw From An Invalid Acount\")\r",
+									"}\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"017063644\",\r\n    \"to_account\":\"01706364497\",\r\n    \"amount\":3000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Baseurl}}/transaction/withdraw",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer Check Balance",
+			"item": [
+				{
+					"name": "Customer Check Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Showing Result For This Acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Showing Result For This Acount\")\r",
+									"}\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Baseurl}}/transaction/balance/01706364497",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"01706364497"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Can Not Check Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"User not found\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{Baseurl}}/transaction/balance/017063644",
+							"host": [
+								"{{Baseurl}}"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"017063644"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Send money to other customer",
+			"item": [
+				{
+					"name": "Send money to other customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Sending money is Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Sending money is Successfull\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"{{phone_number}}\",\r\n    \"to_account\":\"01504788832\",\r\n    \"amount\":200\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/sendmoney",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"sendmoney"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Can Not Send money to other customer Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Insufficient balance\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Insufficient balance\")\r",
+									"}\r",
+									"pm.test(\"Status code is 208\", function () {\r",
+									"    pm.response.to.have.status(208);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"01706364492\",\r\n    \"to_account\":\"01504788832\",\r\n    \"amount\":200000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/sendmoney",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"sendmoney"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment By Customer",
+			"item": [
+				{
+					"name": "Payment by customer to mercent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Payment Successfull\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Payment successful\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"{{phone_number}}\",\r\n    \"to_account\":\"01686606905\",\r\n    \"amount\":20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/payment",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Can Not Payment by customer to mercent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Account does not exist\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Account does not exist\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from_account\":\"01504788832\",\r\n    \"to_account\":\"016866065\",\r\n    \"amount\":20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/payment",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2nd Customer Check Balance & Status",
+			"item": [
+				{
+					"name": "2nd Customer Check Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Showing Result for this acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Showing Result for this acount\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/balance/01504788832",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"01504788832"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2nd Customer Can Not Check Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"User not found\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/balance/0150478883",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"0150478883"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2nd Customer Check Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Showing Result for this acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"Showing Result for this acount\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/statement/01504788832",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"statement",
+								"01504788832"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2nd Customer Can Not Check Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"User not found\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/statement/01504788jk",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"statement",
+								"01504788jk"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Merchent Check Balance",
+			"item": [
+				{
+					"name": "Check Mercent Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"showing result for this acount\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"showing result for this acount\")\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/balance/01686606905",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"01686606905"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Can Not Check Mercent Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"User not found\"),()=>{\r",
+									"    var jsondata= pm.response.json();\r",
+									"    var actual_message=jsondata.message;\r",
+									"    console.log(actual_message)\r",
+									"    pm.expect(actual_message).contains(\"User not found\")\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://dmoney.roadtocareer.net/transaction/balance/0168660",
+							"protocol": "http",
+							"host": [
+								"dmoney",
+								"roadtocareer",
+								"net"
+							],
+							"path": [
+								"transaction",
+								"balance",
+								"0168660"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Baseurl",
+			"value": "http://dmoney.roadtocareer.net",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluMUByb2FkdG9jYXJlZXIubmV0IiwicGFzc3dvcmQiOiIxMjM0IiwiaWF0IjoxNjg1MzUzMjY1LCJleHAiOjE2ODUzNTUwNjV9.-UETxSpPUX4ak5KG6vYBp3qWA0GbQw2RN3vDJtdZLRA"
+		},
+		{
+			"key": "phone_number",
+			"value": "01588343379"
+		}
+	]
+}
